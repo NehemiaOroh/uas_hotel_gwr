@@ -35,6 +35,17 @@
             height: auto;
         }
 
+        .logo a {
+            display: block;
+            width: 100%;
+            height: 100%;
+            transition: opacity 0.2s;
+        }
+
+        .logo a:hover {
+            opacity: 0.8;
+        }
+
         .logo img {
             width: 100%;
             height: auto;
@@ -166,7 +177,9 @@
 </head>
 <body>
     <div class="logo">
-        <img src="images/logo.png" alt="Logo">
+        <a href="{{ url('/') }}">
+            <img src="images/logo.png" alt="Logo">
+        </a>
     </div>
     <div class="container">
         <h1>Register</h1>

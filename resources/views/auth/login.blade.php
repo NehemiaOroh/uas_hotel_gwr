@@ -27,12 +27,23 @@
             justify-content: center;
             padding: 1rem;
         }
-
+        
         .logo {
             margin-bottom: 1.5rem;
             width: 100%;
             max-width: 100px;
             height: auto;
+        }
+
+        .logo a {
+            display: block;
+            width: 100%;
+            height: 100%;
+            transition: opacity 0.2s;
+        }
+
+        .logo a:hover {
+            opacity: 0.8;
         }
 
         .logo img {
@@ -183,7 +194,9 @@
 </head>
 <body>
     <div class="logo">
-        <img src="images/logo.png" alt="Logo">
+        <a href="{{ url('/') }}">
+            <img src="images/logo.png" alt="Logo">
+        </a>
     </div>
     <div class="container">
         <h1>Login</h1>
@@ -215,9 +228,6 @@
                     <a href="{{ route('password.request') }}">{{ __('Forgot your password?') }}</a>
                 @endif
                 <button type="submit">{{ __('Log in') }}</button>
-                <p class="mt-6 text-center text-gray-600">Don't have an account? 
-                <a href="{{ route('register') }}" class="text-blue-600 hover:underline">Register</a>
-            </p>
             </div>
         </form>
     </div>
