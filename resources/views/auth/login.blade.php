@@ -1,47 +1,225 @@
-<x-guest-layout>
-    <!-- Session Status -->
-    <x-auth-session-status class="mb-4" :status="session('status')" />
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <style>
+         * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
 
-    <form method="POST" action="{{ route('login') }}">
-        @csrf
+        body {
+            font-family: 'PlusJakartaSans-Regular', sans-serif;
+            background-image: url('/images/room.jpeg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            color: #ffffff;
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+        }
 
-        <!-- Email Address -->
-        <div>
-            <x-input-label for="email" :value="__('Email')" />
-            <x-text-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autofocus autocomplete="username" />
-            <x-input-error :messages="$errors->get('email')" class="mt-2" />
-        </div>
+        .logo {
+            margin-bottom: 1.5rem;
+            width: 100%;
+            max-width: 100px;
+            height: auto;
+        }
 
-        <!-- Password -->
-        <div class="mt-4">
-            <x-input-label for="password" :value="__('Password')" />
+        .logo img {
+            width: 100%;
+            height: auto;
+            object-fit: contain;
+        }
 
-            <x-text-input id="password" class="block mt-1 w-full"
-                            type="password"
-                            name="password"
-                            required autocomplete="current-password" />
+        .container {
+            background-color: #ffffff;
+            color: #201c1c;
+            padding: clamp(1rem, 5vw, 2rem);
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+            width: 100%;
+            max-width: 400px;
+            font-family: 'Zodiak-Black', sans-serif;
+        }
 
-            <x-input-error :messages="$errors->get('password')" class="mt-2" />
-        </div>
+        h1 {
+            font-family: 'Zodiak-Black';
+            color: #201c1c;
+            margin-bottom: 1.5rem;
+            font-size: clamp(1.5rem, 4vw, 2rem);
+            text-align: center;
+        }
 
-        <!-- Remember Me -->
-        <div class="block mt-4">
-            <label for="remember_me" class="inline-flex items-center">
-                <input id="remember_me" type="checkbox" class="rounded border-gray-300 text-indigo-600 shadow-sm focus:ring-indigo-500" name="remember">
-                <span class="ms-2 text-sm text-gray-600">{{ __('Remember me') }}</span>
-            </label>
-        </div>
+        .form-group {
+            margin-bottom: 1.25rem;
+        }
 
-        <div class="flex items-center justify-end mt-4">
-            @if (Route::has('password.request'))
-                <a class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" href="{{ route('password.request') }}">
-                    {{ __('Forgot your password?') }}
-                </a>
-            @endif
+        label {
+            display: block;
+            font-size: clamp(0.875rem, 2vw, 0.9rem);
+            margin-bottom: 0.5rem;
+            color: #201c1c;
+        }
 
-            <x-primary-button class="ms-3">
-                {{ __('Log in') }}
-            </x-primary-button>
-        </div>
-    </form>
-</x-guest-layout>
+        input[type="email"],
+        input[type="password"] {
+            width: 100%;
+            padding: 0.75rem;
+            font-size: clamp(0.875rem, 2vw, 1rem);
+            border: 1px solid #c89c64;
+            border-radius: 4px;
+            outline: none;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        input[type="email"]:focus,
+        input[type="password"]:focus {
+            border-color: #c89c64;
+            box-shadow: 0 0 5px rgba(200, 156, 100, 0.5);
+        }
+
+        .error {
+            color: #e63946;
+            font-size: clamp(0.75rem, 1.5vw, 0.8rem);
+            margin-top: 0.25rem;
+        }
+
+        .checkbox-group {
+            margin: 1.25rem 0;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .checkbox-group input[type="checkbox"] {
+            width: 1rem;
+            height: 1rem;
+            margin: 0;
+        }
+
+        .checkbox-group label {
+            display: inline;
+            margin: 0;
+            font-size: clamp(0.8rem, 2vw, 0.9rem);
+        }
+
+        .actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 1.5rem;
+        }
+
+        .actions a {
+            font-size: clamp(0.8rem, 2vw, 0.9rem);
+            color: #201c1c;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .actions a:hover {
+            color: #c89c64;
+        }
+
+        button {
+            background-color: #c89c64;
+            color: #ffffff;
+            font-size: clamp(0.875rem, 2vw, 1rem);
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            white-space: nowrap;
+        }
+
+        button:hover {
+            background-color: #a57949;
+        }
+
+        /* Media Queries */
+        @media screen and (max-width: 480px) {
+            .actions {
+                flex-direction: column-reverse;
+                align-items: stretch;
+                gap: 1rem;
+            }
+
+            .actions button {
+                width: 100%;
+            }
+
+            .actions a {
+                text-align: center;
+            }
+
+            .container {
+                padding: 1.5rem;
+            }
+        }
+
+        @media screen and (max-width: 320px) {
+            body {
+                padding: 0.5rem;
+            }
+
+            .container {
+                padding: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="logo">
+        <img src="images/logo.png" alt="Logo">
+    </div>
+    <div class="container">
+        <h1>Login</h1>
+        <form method="POST" action="{{ route('login') }}">
+            @csrf
+
+            <!-- Email Address -->
+            <div class="form-group">
+                <label for="email">{{ __('Email') }}</label>
+                <input id="email" type="email" name="email" :value="old('email')" required autofocus autocomplete="username">
+                <div class="error">{{ $errors->first('email') }}</div>
+            </div>
+
+            <!-- Password -->
+            <div class="form-group">
+                <label for="password">{{ __('Password') }}</label>
+                <input id="password" type="password" name="password" required autocomplete="current-password">
+                <div class="error">{{ $errors->first('password') }}</div>
+            </div>
+
+            <!-- Remember Me -->
+            <div class="checkbox-group">
+                <input id="remember_me" type="checkbox" name="remember">
+                <label for="remember_me">{{ __('Remember me') }}</label>
+            </div>
+
+            <div class="actions">
+                @if (Route::has('password.request'))
+                    <a href="{{ route('password.request') }}">{{ __('Forgot your password?') }}</a>
+                @endif
+                <button type="submit">{{ __('Log in') }}</button>
+                <p class="mt-6 text-center text-gray-600">Don't have an account? 
+                <a href="{{ route('register') }}" class="text-blue-600 hover:underline">Register</a>
+            </p>
+            </div>
+        </form>
+    </div>
+</body>
+</html>
